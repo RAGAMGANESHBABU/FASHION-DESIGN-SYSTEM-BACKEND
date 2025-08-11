@@ -3,15 +3,31 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const morgan = require('morgan');
 
 dotenv.config();
 
 const app = express();
 
+// Security HTTP headers
+app.use(helmet());
+
+// Rate limiting (max 100 requests per 15 mins per IP)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 100,
+  message: 'Too many requests from this IP, please try again later',
+});
+app.use(limiter);
+
+// Logging HTTP requests
+app.use(morgan('combined'));
+
 app.use(cors());
 app.use(express.json());
 
-// Serve uploads folder - note: Vercel lo static serve avvadu, local testing ki matrame
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const userRoutes = require('./routes/userRoutes');
@@ -40,7 +56,6 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
-// For local testing only: listen to port if run directly
 if (require.main === module) {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
