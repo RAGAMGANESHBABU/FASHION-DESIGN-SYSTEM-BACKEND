@@ -12,8 +12,9 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-const userRoutes = require('../routes/userRoutes');
-const productRoutes = require('../routes/productRoutes');
+const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
+
 
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
