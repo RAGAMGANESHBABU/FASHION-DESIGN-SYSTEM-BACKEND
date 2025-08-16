@@ -1,17 +1,8 @@
 const express = require('express');
+const { createOrder, getAllOrders } = require('../controllers/orderController');
 const router = express.Router();
-const { createOrder, getAllOrders, getCartOrders, getPurchasedOrders } = require('../controllers/orderController');
 
-// Create order (Add to Cart / Buy Now)
-router.post('/', createOrder);
-
-// Get all orders
-router.get('/', getAllOrders);
-
-// Get only cart items
-router.get('/cart', getCartOrders);
-
-// Get only purchased items
-router.get('/purchased', getPurchasedOrders);
+router.post('/', createOrder);   // Add order (cart or buy)
+router.get('/', getAllOrders);  // Fetch all orders
 
 module.exports = router;

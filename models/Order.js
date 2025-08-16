@@ -1,10 +1,9 @@
-// models/orderModel.js
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-  quantity: { type: Number, default: 1 },
-  isCart: { type: Boolean, default: true }, // true = cart, false = direct buy
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true }],
+  isCart: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 
