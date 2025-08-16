@@ -26,13 +26,18 @@ app.use(rateLimit({
 }));
 
 // ✅ CORS setup
+// ✅ CORS setup
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://your-frontend.vercel.app'], // replace with real frontend URL
+  origin: [
+    'http://localhost:3000',
+    'https://fashion-design-system-frontend.vercel.app'
+  ],
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
   credentials: true,
 };
-app.use(cors(corsOptions)); // must be before routes
+app.use(cors(corsOptions));
+ // must be before routes
 
 // ❌ You don’t actually need this line, Express + cors() already handle OPTIONS
 // app.options('/*', cors(corsOptions));

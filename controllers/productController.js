@@ -13,6 +13,32 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, price, description, category, image } = req.body;
+
+    if (!name || !price || !description || !category || !image) {
+      return res.status(400).json({ error: 'All fields required' });
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      id,
+      { name, price, description, category, image },
+      { new: true } // 👈 updated product return avvali
+    );
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    res.json({ message: 'Product updated', product });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update product' });
+  }
+};
+
+
 const addProduct = async (req, res) => {
   try {
     const { name, price, description, category, image } = req.body;
@@ -39,4 +65,4 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = { getAllProducts, addProduct, deleteProduct };
+module.exports = { getAllProducts, addProduct, deleteProduct, updateProduct};
