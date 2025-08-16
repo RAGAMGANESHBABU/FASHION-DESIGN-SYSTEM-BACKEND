@@ -1,15 +1,14 @@
 const express = require('express');
 const { registerUser, loginUser, getUserProfile } = require('../controllers/userController');
-
 const router = express.Router();
 
-// POST /api/users/register
+// Register route
 router.post('/register', registerUser);
 
-// POST /api/users/login
+// Login route
 router.post('/login', loginUser);
 
-// GET /api/users/profile/:id
+// Get user profile
 router.get('/profile/:id', getUserProfile);
 
 module.exports = router;
