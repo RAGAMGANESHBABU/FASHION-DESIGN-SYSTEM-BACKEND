@@ -1,14 +1,11 @@
 const Product = require('../models/Product');
 
-// Get all products (with optional category filter)
+// Get all products (optional category filter)
 const getAllProducts = async (req, res) => {
   try {
-    const { category } = req.query; // frontend nundi category query
-
+    const { category } = req.query;
     let filter = {};
-    if (category && category !== 'All') {
-      filter.category = category; // filter by category
-    }
+    if (category && category !== 'All') filter.category = category;
 
     const products = await Product.find(filter);
     res.json(products);
@@ -26,23 +23,16 @@ const addProduct = async (req, res) => {
       return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const product = new Product({
-      name,
-      price: Number(price),
-      description,
-      category,
-      image, // store base64 string
-    });
-
+    const product = new Product({ name, price, description, category, image });
     await product.save();
+
     res.status(201).json({ message: 'Product added successfully', product });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: 'Failed to add product' });
   }
 };
 
-// Delete product
+// Delete product by ID
 const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
