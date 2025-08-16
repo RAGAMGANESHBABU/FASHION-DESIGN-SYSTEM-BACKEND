@@ -1,9 +1,16 @@
 const Product = require('../models/Product');
 
-// Get all products
+// Get all products (with optional category filter)
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const { category } = req.query; // frontend nundi category query
+
+    let filter = {};
+    if (category && category !== 'All') {
+      filter.category = category; // filter by category
+    }
+
+    const products = await Product.find(filter);
     res.json(products);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch products' });
