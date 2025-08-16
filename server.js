@@ -2,13 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const path = require('path');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 
 dotenv.config();
-
 const app = express();
 
 // Security headers
@@ -27,11 +25,7 @@ app.use(morgan('combined'));
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-
-// Static file serving
-const uploadsPath = path.join(__dirname, 'uploads');
-app.use('/uploads', express.static(uploadsPath));
+app.use(express.json({ limit: '10mb' })); // 👈 allow large base64 images
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
@@ -40,18 +34,12 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 
 // DB Connection
-let isConnected = false;
-async function connectToDatabase() {
-  if (isConnected) return;
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    isConnected = true;
-    console.log('✅ MongoDB connected');
-  } catch (err) {
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch(err => {
     console.error('❌ DB Connection error:', err.message);
-  }
-}
-connectToDatabase();
+    process.exit(1);
+  });
 
 // Start server locally
 if (require.main === module) {

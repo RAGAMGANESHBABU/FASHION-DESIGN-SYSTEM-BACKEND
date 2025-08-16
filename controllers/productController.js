@@ -1,55 +1,49 @@
 const Product = require('../models/Product');
 
+// Get all products
 const getAllProducts = async (req, res) => {
   try {
-    const category = req.query.category;
-    const filter = category && category !== 'All' ? { category } : {};
-
-    const products = await Product.find(filter);
-    res.status(200).json(products);
+    const products = await Product.find();
+    res.json(products);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch products', details: err.message });
+    res.status(500).json({ error: 'Failed to fetch products' });
   }
 };
 
+// Add product
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, category } = req.body;
+    const { name, price, description, category, image } = req.body;
 
-    // File check
-    if (!req.file) {
-      return res.status(400).json({ error: 'Image file is required' });
+    if (!name || !price || !description || !category || !image) {
+      return res.status(400).json({ error: 'All fields are required' });
     }
 
-    const newProduct = new Product({
+    const product = new Product({
       name,
-      price: Number(price), // ensure it's a number
+      price: Number(price),
       description,
-      image: req.file.filename,
-      category: category || 'Uncategorized'
+      category,
+      image, // store base64 string
     });
 
-    await newProduct.save();
-    res.status(201).json(newProduct);
+    await product.save();
+    res.status(201).json({ message: 'Product added successfully', product });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to add product', details: err.message });
+    console.error(err);
+    res.status(500).json({ error: 'Failed to add product' });
   }
 };
 
+// Delete product
 const deleteProduct = async (req, res) => {
   try {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-    if (!deletedProduct) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
+    const { id } = req.params;
+    await Product.findByIdAndDelete(id);
     res.json({ message: 'Product deleted successfully' });
   } catch (err) {
-    res.status(500).json({ message: 'Error deleting product', details: err.message });
+    res.status(500).json({ error: 'Failed to delete product' });
   }
 };
 
-module.exports = {
-  getAllProducts,
-  addProduct,
-  deleteProduct
-};
+module.exports = { getAllProducts, addProduct, deleteProduct };
