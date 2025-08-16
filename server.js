@@ -8,6 +8,7 @@ const cors = require('cors');
 
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 dotenv.config();
 const app = express();
@@ -48,6 +49,9 @@ app.use(express.json({ limit: '10mb' })); // base64 images
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+
+
 
 // Test route
 app.get('/', (req, res) => {
