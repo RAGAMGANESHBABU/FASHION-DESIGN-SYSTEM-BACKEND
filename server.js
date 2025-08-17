@@ -27,7 +27,6 @@ app.use(rateLimit({
 }));
 
 // ✅ CORS setup
-// ✅ CORS setup
 const corsOptions = {
   origin: [
     'http://localhost:3000',
@@ -38,25 +37,17 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
- // must be before routes
-
-// ❌ You don’t actually need this line, Express + cors() already handle OPTIONS
-// app.options('/*', cors(corsOptions));
 
 // Body parser
-app.use(express.json({ limit: '10mb' })); // base64 images
+app.use(express.json({ limit: '10mb' }));
 
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
-
-
 // Test route
-app.get('/', (req, res) => {
-  res.send('✅ Backend running');
-});
+app.get('/', (req, res) => res.send('✅ Backend running'));
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)

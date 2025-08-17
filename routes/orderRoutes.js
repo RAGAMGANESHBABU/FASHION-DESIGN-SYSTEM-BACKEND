@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { createOrder, getAllOrders, deleteOrder, updateOrder } = require('../controllers/orderController');
+const { createOrder, getAllOrders, updateOrder, deleteOrder } = require('../controllers/orderController');
 
-router.post('/', createOrder);
-router.get('/', getAllOrders);
-router.delete('/:id', deleteOrder); // ✅ delete endpoint
-// routes/orderRoutes.js
-router.patch('/:id', updateOrder);
-
+// CRUD endpoints
+router.post('/', createOrder);       // create
+router.get('/', getAllOrders);       // read all
+router.patch('/:id', updateOrder);   // update (checkout)
+router.delete('/:id', deleteOrder);  // remove
 
 module.exports = router;
