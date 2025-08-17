@@ -37,6 +37,28 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+// controllers/ordersController.js
+const updateOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body; // { isCart: false }
+
+    const updatedOrder = await Order.findByIdAndUpdate(id, updates, { new: true });
+
+    if (!updatedOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    res.json(updatedOrder);
+  } catch (err) {
+    console.error("❌ Error updating order:", err.message);
+    res.status(500).json({ error: "Failed to update order" });
+  }
+};
+
+
+
+
 // Delete order by ID
 const deleteOrder = async (req, res) => {
   try {
@@ -54,4 +76,4 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getAllOrders, deleteOrder };
+module.exports = { createOrder, getAllOrders, deleteOrder, updateOrder };
