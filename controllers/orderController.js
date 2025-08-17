@@ -3,21 +3,15 @@ const Product = require('../models/Product');
 
 const createOrder = async (req, res) => {
   try {
-    const { user, products, isCart } = req.body;
+    const { user, product, isCart } = req.body;
 
-    if (!user || !products || products.length === 0) {
-      return res.status(400).json({ error: "User and products are required" });
+    if (!user || !product) {
+      return res.status(400).json({ error: "User and product are required" });
     }
-
-    // Convert products to array of { product: id, quantity: 1 } if only IDs provided
-    const formattedProducts = products.map(p => {
-      if (typeof p === 'string') return { product: p, quantity: 1 };
-      return p;
-    });
 
     const newOrder = new Order({
       user,
-      products: formattedProducts,
+      product,  // single product
       isCart
     });
 
@@ -32,10 +26,7 @@ const createOrder = async (req, res) => {
 const getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find()
-      .populate({
-        path: 'products.product',
-        model: 'Product'
-      })
+      .populate('product') // single product
       .populate('user', 'name email'); // Only get name & email
     res.json(orders);
   } catch (err) {

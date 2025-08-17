@@ -6,20 +6,11 @@ const orderSchema = new mongoose.Schema({
     ref: 'User', 
     required: true 
   },
-  products: [
-    {
-      product: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Product', 
-        required: true 
-      },
-      quantity: { 
-        type: Number, 
-        default: 1, 
-        min: 1 
-      }
-    }
-  ],
+  product: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Product', 
+    required: true 
+  },
   isCart: { 
     type: Boolean, 
     default: false 
@@ -41,19 +32,16 @@ const orderSchema = new mongoose.Schema({
 
 // Auto calculate totalAmount before saving
 orderSchema.pre("save", async function (next) {
-  if (this.products && this.products.length > 0) {
+  try {
     const Product = mongoose.model("Product");
-    let total = 0;
-
-    for (const item of this.products) {
-      const product = await Product.findById(item.product);
-      if (product) {
-        total += product.price * item.quantity;
-      }
+    const prod = await Product.findById(this.product);
+    if (prod) {
+      this.totalAmount = prod.price; // quantity removed, so single product price
     }
-    this.totalAmount = total;
+    next();
+  } catch (err) {
+    next(err);
   }
-  next();
 });
 
 module.exports = mongoose.model('Order', orderSchema);
