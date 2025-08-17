@@ -33,7 +33,7 @@ const corsOptions = {
     'http://localhost:3000',
     'https://fashion-design-system-frontend.vercel.app'
   ],
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
   credentials: true,
 };
