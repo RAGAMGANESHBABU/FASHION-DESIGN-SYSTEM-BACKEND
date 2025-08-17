@@ -1,11 +1,9 @@
 const express = require('express');
-const { createOrder, getAllOrders } = require('../controllers/orderController');
 const router = express.Router();
+const { createOrder, getAllOrders, deleteOrder } = require('../controllers/ordersController');
 
-// Create a new order (cart or buy)
 router.post('/', createOrder);
-
-// Get all orders
 router.get('/', getAllOrders);
+router.delete('/:id', deleteOrder); // ✅ delete endpoint
 
 module.exports = router;
