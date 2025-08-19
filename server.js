@@ -43,7 +43,7 @@ app.use(rateLimit({
   credentials: true,
 };*/
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 
 // Body parser
