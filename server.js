@@ -36,7 +36,7 @@ app.use(rateLimit({
 const corsOptions = {
   origin: [
     'http://localhost:3000',
-    'https://fashion-design-system-frontend-wyto-7dsuim2jw.vercel.app/'
+    'https://fashion-design-system-frontend-wyto-7dsuim2jw.vercel.app'
   ],
   methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
