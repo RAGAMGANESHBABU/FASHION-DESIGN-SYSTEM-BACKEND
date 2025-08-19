@@ -37,7 +37,6 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // handle preflight for all routes
 
 
 // Body parser
