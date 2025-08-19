@@ -37,6 +37,8 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // handle preflight for all routes
+
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
