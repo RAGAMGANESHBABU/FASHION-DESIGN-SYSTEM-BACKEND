@@ -32,16 +32,7 @@ app.use(rateLimit({
   message: 'Too many requests from this IP, try later',
 }));
 
-// ✅ CORS setup
-/*const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'https://fashion-design-system-frontend-wyto-7dsuim2jw.vercel.app'
-  ],
-  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
-  credentials: true,
-};*/
+
 
 app.use(cors());
 
