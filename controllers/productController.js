@@ -7,7 +7,9 @@ const getAllProducts = async (req, res) => {
     if(category && category !== 'All') filter.category = category;
 
     const products = await Product.find(filter);
+    console.log(products);
     res.json(products);
+    
   } catch(err) {
     res.status(500).json({ error: 'Failed to fetch products' });
   }
