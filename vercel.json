@@ -4,7 +4,6 @@
     { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "server.js" },    // only /api/* goes to backend
-    { "src": "/(.*)", "dest": "/$1" }               // static files served normally
+    { "src": "/(.*)", "dest": "server.js" }
   ]
 }
