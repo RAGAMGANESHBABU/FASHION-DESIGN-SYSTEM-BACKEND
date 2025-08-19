@@ -13,8 +13,12 @@ const orderRoutes = require('./routes/orderRoutes');
 dotenv.config();
 const app = express();
 
-// Security headers
-app.use(helmet());
+// ✅ Security headers (allow CORS related)
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+  crossOriginOpenerPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
 
 // Logging
 app.use(morgan('dev'));
@@ -37,7 +41,7 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-
+//app.options("/*", cors(corsOptions));
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
