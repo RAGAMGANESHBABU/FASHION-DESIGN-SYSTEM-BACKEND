@@ -33,7 +33,7 @@ app.use(rateLimit({
 }));
 
 // ✅ CORS setup
-const corsOptions = {
+/*const corsOptions = {
   origin: [
     'http://localhost:3000',
     'https://fashion-design-system-frontend-wyto-7dsuim2jw.vercel.app'
@@ -41,10 +41,10 @@ const corsOptions = {
   methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization'],
   credentials: true,
-};
+};*/
+
 app.use(cors(corsOptions));
 
-app.options('*', cors(corsOptions));
 
 // Body parser
 app.use(express.json({ limit: '10mb' }));
