@@ -24,6 +24,10 @@ const orderSchema = new mongoose.Schema({
     enum: ["Pending", "Placed", "Shipped", "Delivered", "Cancelled"],
     default: "Pending"
   },
+  location: {
+    type: String, // store Google Maps link like "https://www.google.com/maps?q=lat,lng"
+    default: ""
+  },
   createdAt: { 
     type: Date, 
     default: Date.now 

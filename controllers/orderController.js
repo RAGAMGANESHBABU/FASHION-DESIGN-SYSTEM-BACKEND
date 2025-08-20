@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 // Create order
 const createOrder = async (req, res) => {
   try {
-    const { user, product, isCart } = req.body;
+    const { user, product, isCart, location } = req.body; // added location
 
     if (!user || !product) {
       return res.status(400).json({ error: "User and product are required" });
@@ -13,7 +13,8 @@ const createOrder = async (req, res) => {
     const newOrder = new Order({
       user,
       product,
-      isCart
+      isCart,
+      location // store location in DB
     });
 
     await newOrder.save();
@@ -23,6 +24,7 @@ const createOrder = async (req, res) => {
     res.status(500).json({ error: "Failed to create order" });
   }
 };
+
 
 // Get all orders
 const getAllOrders = async (req, res) => {
