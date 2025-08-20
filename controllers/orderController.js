@@ -1,20 +1,26 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 
+
 // Create order
 const createOrder = async (req, res) => {
   try {
-    const { user, product, isCart, location } = req.body; // added location
+    const { user, product, isCart, location } = req.body;
 
     if (!user || !product) {
       return res.status(400).json({ error: "User and product are required" });
+    }
+
+    // 👇 Add this validation
+    if (!location || location.trim() === "") {
+      return res.status(400).json({ error: "Delivery location is required" });
     }
 
     const newOrder = new Order({
       user,
       product,
       isCart,
-      location // store location in DB
+      location: location.trim() // pakka save avvadaniki
     });
 
     await newOrder.save();
@@ -24,6 +30,7 @@ const createOrder = async (req, res) => {
     res.status(500).json({ error: "Failed to create order" });
   }
 };
+
 
 
 // Get all orders

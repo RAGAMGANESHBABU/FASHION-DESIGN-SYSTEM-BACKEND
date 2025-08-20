@@ -25,8 +25,9 @@ const orderSchema = new mongoose.Schema({
     default: "Pending"
   },
   location: {
-    type: String, // store Google Maps link like "https://www.google.com/maps?q=lat,lng"
-    default: ""
+    type: String, 
+    required: true,
+    trim: true
   },
   createdAt: { 
     type: Date, 
