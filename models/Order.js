@@ -26,7 +26,7 @@ const orderSchema = new mongoose.Schema({
   },
   location: {
     type: String, 
-    default="",
+    default: "",
     trim: true
   },
   createdAt: { 
