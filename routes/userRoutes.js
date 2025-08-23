@@ -1,27 +1,17 @@
-// routes/userRoutes.js
 const express = require('express');
+const { registerUser, loginUser, getUserProfile, getAllUsers } = require('../controllers/userController');
 const router = express.Router();
-const {
-  registerUser,
-  loginUser,
-  getUserProfile,
-  getAllUsers,
-  updateUser,
-  deleteUser
-} = require('../controllers/userController');
 
-const { protect, adminOnly } = require('../middleware/authMiddleware');
-
-// Public
+// Register normal user
 router.post('/register', registerUser);
+
+// Login
 router.post('/login', loginUser);
 
-// Protected: get a profile (any logged-in user can fetch — you can restrict to self/admin if desired)
-router.get('/:id', protect, getUserProfile);
+// Get user profile
+router.get('/profile/:id', getUserProfile);
 
-// Admin routes
-router.get('/', protect, adminOnly, getAllUsers);
-router.patch('/:id', protect, adminOnly, updateUser); // admin updates a user
-router.delete('/:id', protect, adminOnly, deleteUser);
+// Get all users
+router.get('/', getAllUsers);
 
 module.exports = router;
