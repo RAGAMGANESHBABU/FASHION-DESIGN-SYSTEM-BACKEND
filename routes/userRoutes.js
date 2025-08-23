@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, loginUser, getUserProfile, createAdmin } = require('../controllers/userController');
+const { registerUser, loginUser, getUserProfile, getAllUsers } = require('../controllers/userController');
 const router = express.Router();
 
 // Register normal user
@@ -11,6 +11,7 @@ router.post('/login', loginUser);
 // Get user profile
 router.get('/profile/:id', getUserProfile);
 
-
+// Get all users
+router.get('/', getAllUsers);
 
 module.exports = router;

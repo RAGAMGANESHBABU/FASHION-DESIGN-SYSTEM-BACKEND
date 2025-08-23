@@ -5,24 +5,29 @@ const bcrypt = require('bcryptjs');
 const registerUser = async (req, res) => {
   try {
     const { name, email, password, isAdmin } = req.body; // include isAdmin if needed
-    if(!name || !email || !password) 
+    if (!name || !email || !password)
       return res.status(400).json({ error: 'All fields required' });
 
     const existing = await User.findOne({ email });
-    if(existing) 
+    if (existing)
       return res.status(400).json({ error: 'User already exists' });
 
     const hashed = await bcrypt.hash(password, 10);
-    const user = new User({ 
-      name, 
-      email, 
-      password: hashed, 
+    const user = new User({
+      name,
+      email,
+      password: hashed,
       isAdmin: isAdmin || false // default false
     });
     await user.save();
 
-    res.status(201).json({ message: 'User registered successfully', user });
-  } catch(err) {
+    // remove password before sending
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    res.status(201).json({ message: 'User registered successfully', user: userObj });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Registration failed' });
   }
 };
@@ -31,19 +36,23 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    if(!email || !password) 
+    if (!email || !password)
       return res.status(400).json({ error: 'All fields required' });
 
     const user = await User.findOne({ email });
-    if(!user) 
+    if (!user)
       return res.status(400).json({ error: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if(!isMatch) 
+    if (!isMatch)
       return res.status(400).json({ error: 'Invalid credentials' });
 
-    res.json({ message: 'Login successful', user });
-  } catch(err) {
+    const userObj = user.toObject();
+    delete userObj.password;
+
+    res.json({ message: 'Login successful', user: userObj });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Login failed' });
   }
 };
@@ -51,13 +60,27 @@ const loginUser = async (req, res) => {
 // Get user profile
 const getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if(!user) return res.status(404).json({ error: 'User not found' });
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
     res.json(user);
-  } catch(err) {
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed to fetch profile' });
   }
 };
 
-module.exports = { registerUser, loginUser, getUserProfile };
+const getAllUsers = async (req, res) => {
+  try {
+    // Use User.find() (not findall), and exclude passwords
+    const users = await User.find().select('-password');
+
+    // return empty array if none — better than 404 for collections
+    return res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+};
+
+module.exports = { registerUser, loginUser, getUserProfile, getAllUsers };
